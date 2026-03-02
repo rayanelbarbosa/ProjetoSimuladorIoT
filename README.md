@@ -30,35 +30,46 @@ PythonProject/
 ### 1. Instalar Dependências
 
 ```bash
-pip install -r requirements.txt
+py -m pip install -r requirements.txt
 ```
 
 ### 2. Iniciar a API
 
 ```bash
-python app/main.py
+py app/main.py
 ```
+
+> **Alternativa** (equivalente):
+>
+> ```bash
+> py -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+> ```
 
 A API estará disponível em: **http://localhost:8000**
 
 ## 📡 Endpoints da API
 
 ### Status Geral
+
 - **GET** `/api/status` - Status completo do sistema
 
 ### Sensores
+
 - **GET** `/api/sensor/ldr` - Dados do sensor LDR (intensidade, nível, is_dark)
 
 ### Atuadores
+
 - **GET** `/api/relay/status` - Status da lâmpada (is_on)
 - **POST** `/api/relay/set?state=true` - Ligar/desligar lâmpada
 - **GET** `/api/leds/status` - Status dos LEDs (low, medium, high)
 
 ### Controle
+
 - **POST** `/api/mode/toggle` - Alternar entre modo automático e manual
 - **POST** `/api/mode/auto` - Ativar modo automático
 
 ### Simulação
+
 - **POST** `/api/simulate` - Simular mudança na intensidade de luz
 
 ## 🔌 Como Conectar as Rotas
@@ -79,6 +90,7 @@ Para adicionar novos endpoints:
 3. A rota será automaticamente registrada com prefixo `/api`
 
 Exemplo:
+
 ```python
 @router.get("/novo-endpoint")
 def novo_endpoint():
@@ -124,7 +136,7 @@ Acesse **http://localhost:8000/docs** e teste os endpoints interativamente.
 
 ```javascript
 // Exemplo em React
-const response = await fetch('http://localhost:8000/api/status');
+const response = await fetch("http://localhost:8000/api/status");
 const status = await response.json();
 console.log(status);
 ```
@@ -136,6 +148,7 @@ console.log(status);
 - **Alto (Claro)**: > 60% - Lâmpada desliga automaticamente
 
 Esses valores podem ser ajustados em `config.py`:
+
 ```python
 LDR_DARK_THRESHOLD = 30
 LDR_MEDIUM_THRESHOLD = 60
@@ -144,12 +157,14 @@ LDR_MEDIUM_THRESHOLD = 60
 ## 🔄 Fluxo de Funcionamento
 
 ### Modo Automático (Padrão)
+
 1. Sensor LDR lê intensidade de luz
 2. Se luz < 30%: Relé liga, LED vermelho acende
 3. Se luz 30-60%: Relé desliga, LED amarelo acende
 4. Se luz > 60%: Relé desliga, LED verde acende
 
 ### Modo Manual
+
 1. Usuário envia comando para ligar/desligar via API
 2. LEDs continuam indicando nível atual de luz
 3. Usuário pode voltar ao modo automático a qualquer momento
@@ -195,5 +210,4 @@ Todos os endpoints retornam JSON com status completo ou parcial:
 ✅ Modo automático e manual  
 ✅ 8 endpoints REST  
 ✅ CORS habilitado para React  
-✅ Documentação automática (Swagger)  
-
+✅ Documentação automática (Swagger)
